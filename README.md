@@ -1,0 +1,2 @@
+# Resultify
+django Application
