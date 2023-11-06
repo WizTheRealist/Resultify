@@ -1,0 +1,83 @@
+{% extends 'hod_template/base_template.html' %}
+{% block page_title %}
+Add Assessment
+{% endblock page_title %}
+{% block main_content %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12">
+            <!-- general form elements -->
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add Assessment</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form role="form" action="/add_assessment_save" method="post">
+                  {% csrf_token %}
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name" placeholder="Full name">
+                  </div>
+                  <div class="form-group">
+                    <label>Matric Number</label>
+                    <input type="text" class="form-control" placeholder="Mat no." name="matric_number">
+                  </div>
+                   <div class="form-group">
+                    <label>Robotics</label>
+                    <input type="text" class="form-control" placeholder="Score" name="robotics">
+                  </div>
+                   <div class="form-group">
+                    <label>Software Engineering</label>
+                    <input type="text" class="form-control" placeholder="Score" name="software_engineering">
+                  </div>
+                   <div class="form-group">
+                    <label>Verilog</label>
+                    <input type="text" class="form-control" placeholder="Score" name="verilog">
+                  </div>
+                  <div class="form-group">
+                    <label>Total Score</label>
+                    <input type="text" class="form-control" placeholder="Total Score" name="total_score">
+                  </div>
+                  <div class="form-group">
+                    <label>Grades</label>
+                    <input type="text" class="form-control" placeholder="Grades" name="grades">
+                  </div>
+                  <div class="form-group">
+                    <label>Best Student</label>
+                    <input type="text" class="form-control" placeholder="Best Student" name="bgs">
+                  </div>
+                      <div class="form-group">
+                      {% if messages %}
+                        {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                        <div class="alert alert-danger" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% if message.tags == 'success' %}
+                        <div class="alert alert-success" style="margin-top:10px">{{ message }}</div>
+                        {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary btn-block">Add Assessment</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
+
+
+
+          </div>
+          </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
