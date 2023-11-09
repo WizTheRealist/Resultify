@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class CustomUser (AbstractUser):    # Define a custom user model class named CustomUser, inheriting from AbstractUser
@@ -66,19 +67,24 @@ class Students(models.Model):
     updated_at = models.DateTimeField(auto_now=True)  # Define an 'updated_at' field to store the last update date and time with auto_now=True
     objects = models.Manager()  # Define the 'objects' attribute with the default manager
 
+SESSION_CHOICES = (
+    ('2001/2002', '2001/2002'), ('2003/2004', '2003/2004'), ('2005/2006', '2005/2006'), ('2007/2008', '2007/2008'),
+    ('2009/2010', '2009/2010'), ('2011/2012', '2011/2012'), ('2013/2014', '2013/2014'), ('2015/2016', '2015/2016'),
+    ('2017/2018', '2017/2018'), ('2019/2020', '2019/2020'), ('2021/2022', '2021/2022'), ('2023/2024', '2023/2024'),
+)
 class Assessment(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
-    matric_number = models.CharField(max_length=30)
-    robotics = models.CharField(max_length=10)
-    software_engineering = models.CharField(max_length=10)
-    verilog = models.CharField(max_length=10)
-    total_score = models.CharField(max_length=10)
-    grades = models.CharField(max_length=10)
-    bgs = models.CharField(max_length=255)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="student")
+    session = models.CharField(_('session'), choices=SESSION_CHOICES,
+                               max_length=10, default='2012/2014')
+    course_id = models.ForeignKey(Courses, on_delete=models.CASCADE)
+    # uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="uploaded_by")
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    objects = models.Manager()
+    full_name = models.CharField(max_length=30)
+    mat_number = models.CharField(max_length=20)
+    score = models.IntegerField(_('score'))
+    grade = models.CharField(max_length=2)
+
 
 # Define a signal handler to create user profiles after a CustomUser instance is created
 @receiver(post_save, sender=CustomUser)

@@ -60,8 +60,7 @@ class StudentsAdmin(admin.ModelAdmin):
 # Register the Assessment model
 @admin.register(Assessment)
 class AssessmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'matric_number', 'robotics', 'software_engineering', 'verilog', 'total_score', 'grades', 'bgs', 'created_at', 'updated_at')
-    list_filter = ('created_at', 'updated_at')
-    search_fields = ('name', 'matric_number')
-    ordering = ('name',)
+    list_display = ('id', 'full_name', 'mat_number', 'session', 'course_id', 'score', 'grade', 'created_at')
+    search_fields = ['full_name', 'mat_number']
+    list_filter = ['session', 'course_id']
 

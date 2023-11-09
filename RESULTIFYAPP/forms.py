@@ -74,6 +74,7 @@ class EditStudentForm(forms.Form):
     session_end=forms.DateField(label="Session End",widget=DateInput(attrs={"class":"form-control"}))
     profile_pic=forms.FileField(label="Profile Pic",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}),required=False)
 
-
+class FileUploadForm(forms.Form):
+    file = forms.FileField()
 #class SignupForm:
    #pass

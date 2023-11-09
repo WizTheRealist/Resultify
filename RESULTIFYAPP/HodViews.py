@@ -4,8 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from openpyxl.reader.excel import load_workbook
 
-from RESULTIFYAPP.forms import AddStudentForm, EditStudentForm
+from RESULTIFYAPP.forms import AddStudentForm, EditStudentForm, FileUploadForm
 from RESULTIFYAPP.models import CustomUser, Staffs, Department, Courses, Students, Assessment
 
 
@@ -121,38 +122,51 @@ def add_student_save(request):
 def add_assessment(request):
     return render(request, "hod_template/add_assessment_template.html")
 
+
 def add_assessment_save(request):
-    if request.method!="POST":
-        return HttpResponse("Method Not Allowed")
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            fileUploaded = form.cleaned_data['file']
+            session = fileUploaded.name.split('.')[0]
+            workbook = load_workbook(fileUploaded)
+            for sheet_name in workbook.sheetnames:
+                for index, row in enumerate(workbook.active.iter_rows(values_only=True)):
+                    if index == 0:
+                        continue
+                    score = int(row[2])
+                    if score >= 70:
+                        grade = 'A'
+                    elif score >= 60:
+                        grade = 'B'
+                    elif score >= 50:
+                        grade = 'C'
+                    elif score >= 40:
+                        grade = 'D'
+                    elif score >= 30:
+                        grade = 'E'
+                    else:
+                        grade = 'F'
+                    try:
+                        course = Courses.objects.get(course_code=sheet_name)
+                    except Courses.DoesNotExist:
+                        department = Department.objects.get(id=1)
+                        course = department.course_set.create(
+                            course_name="Dummy Course Name",
+                            credit_unit=0, course_code=sheet_name,
+                        )
+                    course.results_set.create(full_name=row[0], mat_number=row[1],
+                                              score=score, grade=grade, session=session)
+
+            return HttpResponse('Done')
+
+
     else:
-        name=request.POST.get("name")
-        matric_number=request.POST.get("matric_number")
-        robotics=request.POST.get("robotics")
-        software_engineering=request.POST.get("software_engineering")
-        verilog=request.POST.get("verilog")
-        total_score=request.POST.get("total_score")
-        grades=request.POST.get("grades")
-        bgs=request.POST.get("bgs")
-        try:
-            assessment_model = Assessment(
-                name=name,
-                matric_number=matric_number,
-                robotics=robotics,
-                software_engineering=software_engineering,
-                verilog=verilog,
-                total_score=total_score,
-                grades=grades,
-                bgs=bgs
-            )
-            assessment_model.save()
-            messages.success(request, "Successfully Added Assessment")
-            return HttpResponseRedirect(reverse("add_assessment"))
-        except Exception as e:
-            print(f"Error while adding assessment: {str(e)}")
-            messages.error(request, "Failed To Add Assessment")
-            return HttpResponseRedirect(reverse("add_assessment"))
-
-
+        form = FileUploadForm()
+    return render(request, 'hod_template/add_assessment_template.html', {'form': form})
+ #   else:
+  #      form = FileUploadForm()
+   # return render(request, 'hod_template/add_assessment_template.html', {'form': form})
 def manage_staff(request):
     staffs=Staffs.objects.all()
     return render(request,"hod_template/manage_staff_template.html",{"staffs":staffs})

@@ -1,6 +1,6 @@
 {% extends 'hod_template/base_template.html' %}
 {% block page_title %}
-Manage Assessment
+Manage Department
 {% endblock page_title %}
 {% block main_content %}
     <!-- Main content -->
@@ -12,7 +12,7 @@ Manage Assessment
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Assessment Details</h3>
+                <h3 class="card-title">Department Details</h3>
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">
@@ -30,25 +30,16 @@ Manage Assessment
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Session</th>
-                      <th>Course</th>
-                      <th>Full Name</th>
-                      <th>Mat Number</th>
-                      <th>Score</th>
-                      <th>Grade</th>
+                      <th>Name</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                  {% for assessment in assessments %}
+                  {% for department in departments %}
                     <tr>
-                      <td>{{ assessment.id }}</td>
-                        <td>{{ assessment.session }}</td>
-                        <td>{{ assessment.course_id }}</td>
-                        <td>{{ assessment.full_name }}</td>
-                        <td>{{ assessment.mat_number }}</td>
-                        <td>{{ assessment.score }}</td>
-                        <td>{{ assessment.grade }}</td>
-                        <td><a href="{% url 'edit_assessment' assessment.id %}" class="btn btn-success">Edit</a></td>
+                      <td>{{ department.id }}</td>
+                        <td>{{ department.department_name }}</td>
+                        <td><a href="{% url 'edit_department' department.id %}" class="btn btn-success">Edit</a></td>
                     </tr>
                   {% endfor %}
                   </tbody>
