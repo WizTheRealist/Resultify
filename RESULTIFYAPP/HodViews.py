@@ -119,17 +119,18 @@ def add_student_save(request):
             form=AddStudentForm(request.POST)
             return render(request, "hod_template/add_student_template.html", {"form": form})
 
-def add_assessment(request):
-    return render(request, "hod_template/add_assessment_template.html")
+# def add_assessment(request):
+#     return render(request, "hod_template/add_assessment_template.html")
 
 
 def add_assessment_save(request):
     if request.method == 'POST':
+
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            fileUploaded = form.cleaned_data['file']
-            session = fileUploaded.name.split('.')[0]
-            workbook = load_workbook(fileUploaded)
+            file_uploaded = form.cleaned_data['file']
+            session = file_uploaded.name.split('.')[0]
+            workbook = load_workbook(file_uploaded)
             for sheet_name in workbook.sheetnames:
                 for index, row in enumerate(workbook.active.iter_rows(values_only=True)):
                     if index == 0:
@@ -156,14 +157,11 @@ def add_assessment_save(request):
                             credit_unit=0, course_code=sheet_name,
                         )
                     course.results_set.create(full_name=row[0], mat_number=row[1],
-                                              score=score, grade=grade, session=session)
-
+                        score=score, grade=grade, session=session)
             return HttpResponse('Done')
+        return HttpResponse('An error occurred')
 
-
-    else:
-        form = FileUploadForm()
-    return render(request, 'hod_template/add_assessment_template.html', {'form': form})
+    return render(request, 'hod_template/add_assessment_template.html', {'form': FileUploadForm()})
  #   else:
   #      form = FileUploadForm()
    # return render(request, 'hod_template/add_assessment_template.html', {'form': form})
