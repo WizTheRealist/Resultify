@@ -131,7 +131,7 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 STATIC_URL="/static/"
 STATIC_ROOT=os.path.join(BASE_DIR,"static")
 
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 AUTH_USER_MODEL="RESULTIFYAPP.CustomUser"
 AUTHENTICATION_BACKENDS=['RESULTIFYAPP.EmailBackEnd.EmailBackEnd']
 

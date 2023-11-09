@@ -64,3 +64,4 @@ class AssessmentAdmin(admin.ModelAdmin):
     list_filter = ('created_at', 'updated_at')
     search_fields = ('name', 'matric_number')
     ordering = ('name',)
+

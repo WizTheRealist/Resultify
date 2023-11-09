@@ -44,6 +44,25 @@
             </a>
           </li>
           <li class="nav-item">
+            {% url 'add_department' as add_department %}
+            <a href="{{ add_department }}" class="nav-link {% if request.path == add_department %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Add Department
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+              {% url 'manage_department' as manage_department %}
+            {% url 'edit_department' department_id=id as edit_department %}
+            <a href="{% url 'manage_department' %}" class="nav-link {% if request.path == manage_department %} active {% endif %} {% if request.path == edit_department %} active {% endif %}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Manage Department
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
               {% url 'add_student' as add_student %}
             <a href="{% url 'add_student' %}" class="nav-link {% if request.path == add_student %} active {% endif %}">
               <i class="nav-icon fas fa-th"></i>

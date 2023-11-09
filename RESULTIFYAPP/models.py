@@ -42,6 +42,7 @@ class Department(models.Model):
 class Courses(models.Model):
     id = models.AutoField(primary_key=True)  # Define a primary key field 'id' with auto-incrementing behavior
     course_name = models.CharField(max_length=255)  # Define a 'course_name' field to store the name of the course with a maximum length of 255 characters
+    department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
     credit_unit = models.CharField(max_length=1)  # Define an 'credit_unit' field to store the credit units of the course
     course_code = models.CharField(max_length=10)  # Define a 'course_code' field to store the code of the course with a maximum length of 10 characters
     staff_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Define a foreign key field 'staff_id' to associate the course with a CustomUser, using CASCADE for automatic deletion if the related CustomUser is deleted

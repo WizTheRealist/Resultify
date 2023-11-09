@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
 from RESULTIFYAPP.forms import AddStudentForm, EditStudentForm
-from RESULTIFYAPP.models import CustomUser, Staffs, Courses, Students, Assessment
+from RESULTIFYAPP.models import CustomUser, Staffs, Department, Courses, Students, Assessment
 
 
 def admin_home(request):
@@ -35,12 +35,31 @@ def add_staff_save(request):
             messages.error(request,"Failed to Add Staff")
             return HttpResponseRedirect(reverse("add_staff"))
 
+def add_department(request):
+    return render(request, "hod_template/add_department_template.html")
+
+def add_department_save(request):
+    if request.method!="POST":
+        return HttpResponse("Method Not Allowed")
+    else:
+        department_name = request.POST.get("department")
+        try:
+            department_model = Department(department_name=department_name)
+            department_model.save()
+            messages.success(request, "Successfully Added Department")
+            return HttpResponseRedirect(reverse("add_department"))
+        except Exception as e:
+            print(f"Error while adding department: {str(e)}")
+            messages.error(request, "Failed To Add Department")
+            return HttpResponseRedirect(reverse("add_department"))
+
+
 def add_course(request):
     return render(request,"hod_template/add_course_template.html")
 
 def add_course_save(request):
     if request.method != "POST":
-        return HttpResponse("Method Not Allowed")
+        return HttpResponseRedirect("Method Not Allowed")
     else:
         course = request.POST.get("course")
         try:
@@ -137,6 +156,9 @@ def add_assessment_save(request):
 def manage_staff(request):
     staffs=Staffs.objects.all()
     return render(request,"hod_template/manage_staff_template.html",{"staffs":staffs})
+def manage_department(request):
+    departments=Department.objects.all()
+    return render(request, "hod_template/manage_department_template.html", {"departments":departments})
 
 def manage_student(request):
     students=Students.objects.all()
@@ -147,8 +169,8 @@ def manage_course(request):
     return render(request,"hod_template/manage_course_template.html",{"courses":courses})
 
 def manage_assessment(request):
-    assessment=Assessment.objects.all()
-    return render(request,"hod_template/manage_assessment_template.html",{"assessment":assessment})
+    assessments=Assessment.objects.all()
+    return render(request,"hod_template/manage_assessment_template.html",{"assessments":assessments})
 
 def edit_staff(request,staff_id):
     staff=Staffs.objects.get(admin=staff_id)
@@ -181,6 +203,27 @@ def edit_staff_save(request):
         except:
             messages.error(request,"Failed to Edit Staff")
             return HttpResponseRedirect(reverse("edit_staff",kwargs={"staff_id":staff_id}))
+
+def edit_department(request, department_id):
+    department = Department.objects.get(id=department_id)
+    return render(request, "hod/edit_department_template.html", {"department": department, "id": department_id})
+
+def edit_department_save(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        department_id = request.POST.get("department_id")
+        department_name = request.POST.get("department")
+        try:
+            department = Department.objects.get(id=department_id)
+            department.department_name = department_name
+            department.save()
+            messages.success(request, "Successfully Edited Department")
+            return HttpResponseRedirect(reverse("edit_department", kwargs={"department_id": department_id}))
+        except:
+            messages.error(request, "Failed to Edit Department")
+            return HttpResponseRedirect(reverse("edit_department", kwargs={"department_id": department_id}))
+
 
 def edit_student(request,student_id):
     request.session['student_id']=student_id
@@ -256,27 +299,48 @@ def edit_student_save(request):
             return render(request,"hod_template/edit_student_template.html",{"form":form,"id":student_id,"username":student.admin.username})
 
 
-def edit_course(request,course_id):
-    course=Courses.objects.get(id=course_id)
-    return render(request,"hod_template/edit_course_template.html",{"course":course,"id":course_id})
+def edit_course(request, course_id):
+    # Get the existing course using get_object_or_404
+    course = get_object_or_404(Courses, id=course_id)
+
+    # Now you can retrieve the department and staff associated with the course
+    department = course.department_id
+    staff = course.staff_id
+
+    return render(request, "hod_template/edit_course_template.html", {
+        "course": course,
+        "id": course_id,
+        "department": department,
+        "staff": staff
+    })
+#def edit_course(request,course_id):
+#    course=Courses.objects.get(id=course_id)
+#    return render(request,"hod_template/edit_course_template.html",{"course":course,"id":course_id})
 
 def edit_course_save(request):
-    if request.method!="POST":
+    if request.method != "POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        course_id=request.POST.get("course_id")
-        course_name=request.POST.get("course")
+        course_id = request.POST.get("course_id")
+        course_name = request.POST.get("course")
+        department_id = request.POST.get("department")  # Retrieve the selected department
+        staff_id = request.POST.get("staff")  # Retrieve the selected staff
+        credit_unit = request.POST.get("credit_unit")
+        course_code = request.POST.get("course_code")
 
         try:
-            course=Courses.objects.get(id=course_id)
-            course.course_name=course_name
+            course = Courses.objects.get(id=course_id)
+            course.course_name = course_name
+            course.department_id_id = department_id  # Set the department using its ID
+            course.staff_id_id = staff_id  # Set the staff using its ID
+            course.credit_unit = credit_unit
+            course.course_code = course_code
             course.save()
-            messages.success(request,"Successfully Edited Course")
-            return HttpResponseRedirect(reverse("edit_course",kwargs={"course_id":course_id}))
+            messages.success(request, "Successfully Edited Course")
+            return HttpResponseRedirect(reverse("edit_course", kwargs={"course_id": course_id}))
         except:
-            messages.error(request,"Failed to Edit Course")
-            return HttpResponseRedirect(reverse("edit_course",kwargs={"course_id":course_id}))
-
+            messages.error(request, "Failed to Edit Course")
+            return HttpResponseRedirect(reverse("edit_course", kwargs={"course_id": course_id}))
 def edit_assessment(request, assessment_id):
     assessment = Assessment.objects.get(id=assessment_id)
     return render(request, "hod_template/edit_assessment_template.html", {"assessment": assessment, "id": assessment_id})
