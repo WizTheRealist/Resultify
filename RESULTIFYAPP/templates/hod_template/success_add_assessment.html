@@ -1,16 +1,11 @@
 {% extends 'hod_template/base_template.html' %}
 {% block page_title %}
-    Add An Assessment
+Assessment Success
 {% endblock page_title %}
 {% block main_content %}
-
     <section class="content">
         <div class="container-fluid">
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">Upload</button>
-            </form>
+            You have Successfully uploaded an Assessment
         </div>
     </section>
 {% endblock %}

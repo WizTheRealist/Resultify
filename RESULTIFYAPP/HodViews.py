@@ -16,6 +16,7 @@ def admin_home(request):
 def add_staff(request):
     return render(request,"hod_template/add_staff_template.html")
 
+
 def add_staff_save(request):
     if request.method!="POST":
         return HttpResponse("Method Not Allowed")
@@ -91,7 +92,7 @@ def add_student_save(request):
             address=form.cleaned_data["address"]
             session_start=form.cleaned_data["session_start"]
             session_end=form.cleaned_data["session_end"]
-            course_id=form.cleaned_data["course"]
+            # course_id=form.cleaned_data["course"]
             sex=form.cleaned_data["sex"]
 
             profile_pic=request.FILES['profile_pic']
@@ -103,8 +104,8 @@ def add_student_save(request):
                 user=CustomUser.objects.create_user(username=username,password=password,email=email,last_name=last_name,first_name=first_name,user_type=3)
                 user.students.address=address
                 user.students.matric_number=matric_number
-                course_obj=Courses.objects.get(id=course_id)
-                user.students.course_id=course_obj
+                # course_obj=Courses.objects.get(course_code='ECE 6010')
+                # user.students.course_id=course_obj
                 user.students.session_start_year=session_start
                 user.students.session_end_year=session_end
                 user.students.gender=sex
@@ -123,15 +124,16 @@ def add_student_save(request):
 #     return render(request, "hod_template/add_assessment_template.html")
 
 
-def add_assessment_save(request):
-    if request.method == 'POST':
+def add_assessment(request):
 
+    if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             file_uploaded = form.cleaned_data['file']
             session = file_uploaded.name.split('.')[0]
             workbook = load_workbook(file_uploaded)
             for sheet_name in workbook.sheetnames:
+                sheet_name = str(sheet_name).replace('_', '/')
                 for index, row in enumerate(workbook.active.iter_rows(values_only=True)):
                     if index == 0:
                         continue
@@ -158,7 +160,7 @@ def add_assessment_save(request):
                         )
                     course.assessment_set.create(full_name=row[0], mat_number=row[1],
                         score=score, grade=grade, session=session)
-            return HttpResponse('Done')
+            return HttpResponseRedirect(reverse("success_assessment"))
         return HttpResponse('An error occurred')
 
     return render(request, 'hod_template/add_assessment_template.html', {'form': FileUploadForm()})
@@ -394,38 +396,5 @@ def edit_assessment_save(request):
             messages.error(request, "Failed To Update Assessment")
             return HttpResponseRedirect(reverse("add_assessment"))
 
-
-
-#def edit_assessment_save(request):
- #   if request.method!="POST":
-  #      return HttpResponse("<h2>Method Not Allowed</h2>")
-   # else:
-    #    assessment_id = request.POST.get("assessment_id")
-     #   name = request.POST.get("name")
-      #  matric_number = request.POST.get("matric_number")
-       # robotics = request.POST.get("robotics")
-        #software_engineering = request.POST.get("software_engineering")
-        #verilog = request.POST.get("verilog")
-        #total_score = request.POST.get("total_score")
-        #grades = request.POST.get("grades")
-        #bgs = request.POST.get("bgs")
-        #try:
-         #   assessment_model = Assessment(
-          #      assessment_id=assessment_id,
-           #     name=name,
-            #    matric_number=matric_number,
-             #   robotics=robotics,
-              #  software_engineering=software_engineering,
-               # verilog=verilog,
-                #total_score=total_score,
-                #grades=grades,
-                #bgs=bgs
-            #)
-            #assessment_model.save()
-            #messages.success(request, "Successfully Added Assessment")
-            #return HttpResponseRedirect(reverse("add_assessment"))
-        #except Exception as e:
-         #   print(f"Error while adding assessment: {str(e)}")
-          #  messages.error(request, "Failed To Add Assessment")
-           # return HttpResponseRedirect(reverse("add_assessment"))
-
+def success_assessment(request):
+    return render(request, "hod_template/success_add_assessment.html")

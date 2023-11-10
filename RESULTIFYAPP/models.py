@@ -51,6 +51,9 @@ class Courses(models.Model):
     updated_at = models.DateTimeField(auto_now=True)  # Define an 'updated_at' field to store the last update date and time with auto_now=True
     objects = models.Manager()  # Define the 'objects' attribute with the default manager
 
+    def __str__(self):
+        return self.course_code
+
 class Students(models.Model):
     id = models.AutoField(primary_key=True)  # Define a primary key field 'id' with auto-incrementing behavior
     admin = models.OneToOneField(CustomUser, on_delete=models.CASCADE)  # Define a one-to-one relationship with the 'CustomUser' model, indicating that each student is associated with one CustomUser and using CASCADE for automatic deletion if the related CustomUser is deleted
@@ -60,7 +63,7 @@ class Students(models.Model):
     gender = models.CharField(max_length=255)  # Define a 'gender' field to store the gender of the student with a maximum length of 255 characters
     profile_pic = models.FileField()  # Define a 'profile_pic' field to store the profile picture of the student
     address = models.TextField()  # Define an 'address' field to store the address of the student as text
-    course_id = models.ForeignKey(Courses, on_delete=models.DO_NOTHING)  # Define a foreign key field 'course_id' to associate the student with a course (Courses model) without any automatic deletion action (DO_NOTHING)
+    # course_id = models.ForeignKey(Courses, on_delete=models.DO_NOTHING)  # Define a foreign key field 'course_id' to associate the student with a course (Courses model) without any automatic deletion action (DO_NOTHING)
     session_start_year = models.DateField()  # Define a 'session_start_year' field to store the start year of the student's session
     session_end_year = models.DateField()  # Define a 'session_end_year' field to store the end year of the student's session
     created_at = models.DateTimeField(auto_now_add=True)  # Define a 'created_at' field to store the creation date and time with auto_now_add=True

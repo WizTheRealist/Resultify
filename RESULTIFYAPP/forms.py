@@ -25,14 +25,14 @@ class AddStudentForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(AddStudentForm, self).__init__(*args, **kwargs)
-        courses = Courses.objects.all()
-        self.fields['course'].choices = [(course.id, course.course_name) for course in courses]
+        # courses = Courses.objects.all()
+        # self.fields['course'].choices = [(course.id, course.course_name) for course in courses]
 
-    #courses=Courses.objects.all()
-    #course_list=[]
-    #for course in courses:
-     #   small_course=(course.id,course.course_name)
-      #  course_list.append(small_course)
+    # courses=Courses.objects.all()
+    # course_list=[]
+    # for course in courses:
+    #    small_course=(course.id,course.course_name)
+    #    course_list.append(small_course)
 
     gender_choice=(
         ("Male","Male"),
@@ -55,20 +55,20 @@ class EditStudentForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(EditStudentForm, self).__init__(*args, **kwargs)
-        courses = Courses.objects.all()
-        self.fields['course'].choices = [(course.id, course.course_name) for course in courses]
-    #courses=Courses.objects.all()
-    #course_list=[]
-    #for course in courses:
-     #   small_course=(course.id,course.course_name)
-      #  course_list.append(small_course)
+        # courses = Courses.objects.all()
+        # self.fields['course'].choices = [(course.id, course.course_name) for course in courses]
+    courses=Courses.objects.all()
+    course_list=[]
+    for course in courses:
+       small_course=(course.id,course.course_name)
+       course_list.append(small_course)
 
     gender_choice=(
         ("Male","Male"),
         ("Female","Female")
     )
 
-#    course=forms.ChoiceField(label="Course",choices=course_list,widget=forms.Select(attrs={"class":"form-control"}))
+    course=forms.ChoiceField(label="Course",choices=course_list,widget=forms.Select(attrs={"class":"form-control"}))
     sex=forms.ChoiceField(label="Sex",choices=gender_choice,widget=forms.Select(attrs={"class":"form-control"}))
     session_start=forms.DateField(label="Session Start",widget=DateInput(attrs={"class":"form-control"}))
     session_end=forms.DateField(label="Session End",widget=DateInput(attrs={"class":"form-control"}))
