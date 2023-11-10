@@ -52,7 +52,7 @@ class CoursesAdmin(admin.ModelAdmin):
 # Register the Students model
 @admin.register(Students)
 class StudentsAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'matric_number', 'course_id', 'session_start_year', 'session_end_year')
+    list_display = ('first_name', 'last_name', 'matric_number', 'session_start_year', 'session_end_year')
     list_filter = ('session_start_year', 'session_end_year')
     search_fields = ('first_name', 'last_name', 'matric_number')
     ordering = ('first_name',)
