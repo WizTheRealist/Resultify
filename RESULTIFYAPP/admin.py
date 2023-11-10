@@ -44,8 +44,8 @@ class DepartmentAdmin(admin.ModelAdmin):
 # Register the Courses model
 @admin.register(Courses)
 class CoursesAdmin(admin.ModelAdmin):
-    list_display = ('course_name', 'credit_unit', 'staff_id', 'course_code')
-    list_filter = ('staff_id', 'created_at')
+    list_display = ('course_name', 'credit_unit', 'course_code')
+    # list_filter = ('created_at')
     search_fields = ('course_name', 'course_code')
     ordering = ('course_name',)
 

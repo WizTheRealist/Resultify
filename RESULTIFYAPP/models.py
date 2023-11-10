@@ -46,7 +46,7 @@ class Courses(models.Model):
     department_id = models.ForeignKey(Department, on_delete=models.CASCADE)
     credit_unit = models.CharField(max_length=1)  # Define an 'credit_unit' field to store the credit units of the course
     course_code = models.CharField(max_length=10, unique=True)  # Define a 'course_code' field to store the code of the course with a maximum length of 10 characters
-    staff_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Define a foreign key field 'staff_id' to associate the course with a CustomUser, using CASCADE for automatic deletion if the related CustomUser is deleted
+    # staff_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Define a foreign key field 'staff_id' to associate the course with a CustomUser, using CASCADE for automatic deletion if the related CustomUser is deleted
     created_at = models.DateTimeField(auto_now_add=True)  # Define a 'created_at' field to store the creation date and time with auto_now_add=True
     updated_at = models.DateTimeField(auto_now=True)  # Define an 'updated_at' field to store the last update date and time with auto_now=True
     objects = models.Manager()  # Define the 'objects' attribute with the default manager

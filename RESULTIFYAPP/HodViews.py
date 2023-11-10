@@ -152,11 +152,11 @@ def add_assessment_save(request):
                         course = Courses.objects.get(course_code=sheet_name)
                     except Courses.DoesNotExist:
                         department = Department.objects.get(id=1)
-                        course = department.course_set.create(
+                        course = department.courses_set.create(
                             course_name="Dummy Course Name",
                             credit_unit=0, course_code=sheet_name,
                         )
-                    course.results_set.create(full_name=row[0], mat_number=row[1],
+                    course.assessment_set.create(full_name=row[0], mat_number=row[1],
                         score=score, grade=grade, session=session)
             return HttpResponse('Done')
         return HttpResponse('An error occurred')
