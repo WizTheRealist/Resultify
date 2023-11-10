@@ -39,7 +39,7 @@ urlpatterns = [
     path('add_course_save', HodViews.add_course_save,name="add_course_save"),
     path('add_student', HodViews.add_student,name="add_student"),
     path('add_student_save', HodViews.add_student_save,name="add_student_save"),
-    path('add_assessment', HodViews.add_assessment,name="add_assessment"),
+    # path('add_assessment', HodViews.add_assessment,name="add_assessment"),
     path('add_assessment_save', HodViews.add_assessment_save,name="add_assessment_save"),
     path('manage_staff', HodViews.manage_staff,name="manage_staff"),
     path('manage_department',HodViews.manage_department,name="manage_department"),
@@ -59,4 +59,7 @@ urlpatterns = [
 #     Staff URL Path
     path('staff_home', StaffViews.staff_home, name="staff_home"),
     path('student_home', StudentViews.student_home, name="student_home"),
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
+]+static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+    )+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

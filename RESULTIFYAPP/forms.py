@@ -76,5 +76,3 @@ class EditStudentForm(forms.Form):
 
 class FileUploadForm(forms.Form):
     file = forms.FileField()
-#class SignupForm:
-   #pass
